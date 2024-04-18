@@ -23,7 +23,7 @@ create table if not exists ALT_SCHOOL.CUSTOMERS
 (
     customer_id uuid primary key,
     device_id uuid NOT NULL,
-    "location" varchar(50) NOT NULL,
+    "location" varchar(255) NOT NULL,
     currency varchar(10) NULL
 );
 
@@ -39,7 +39,7 @@ create table if not exists ALT_SCHOOL.ORDERS
     order_id uuid not null primary key,
     customer_id uuid not null,
     "status" varchar(50) not null,
-    checked_out_at timestamp not null,
+    checked_out_at timestamp not null
 );
 
 -- provide the command to copy orders data into POSTGRES
