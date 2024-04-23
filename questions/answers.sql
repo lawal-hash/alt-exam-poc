@@ -79,6 +79,13 @@ where row_rank <= 5
 
 
 -- Question 2b.1 
+/* 
+Determine the most common location (country) where successful checkouts occurred
+To get the most common location where successful checkouts occurred, created 2 CTEs, location_count and location_count_rank.
+1. location_count: in this CTE, only successful checkouts are selected. The count of successful checkouts is grouped by location.
+2. location_count_rank: in this CTE, the rank() function is used to rank the locations based on the number of successful checkouts.
+   					The rank is done in descending order, finally, filter from this CTE where the row_rank is equal to 1.
+*/ 
 
 with location_count as (
     select location,
