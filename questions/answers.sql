@@ -65,3 +65,31 @@ where
 	and event_type != 'visit'
 group by
 	customer_id
+
+
+
+-- question 2b.3
+with event_group as (
+select
+	customer_id,
+	count( distinct e.event_data ->> 'timestamp')as event_count
+from
+	alt_school.events e
+where
+	customer_id in (
+	select
+		distinct customer_id
+	from
+		alt_school.events e
+	where
+		e.event_data ->> 'status' = 'success')
+	and e.event_data ->> 'event_type' = 'visit'
+group by
+	customer_id
+)
+
+select
+	avg(event_count):: numeric(5,
+	2) as average_visits
+from
+	event_group;
