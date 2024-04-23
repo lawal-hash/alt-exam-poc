@@ -47,8 +47,19 @@ from
 	most_ordered_items_rank
 where
 	row_rank = 1;
--- Question 2a.2
 
+-- Question 2a.2
+/*
+without considering currency, and without using the line_item table, find the top 5 spenders 
+
+To find the top 5 spenders, created 3 CTEs, order_quantity, spender, and spender_rank.
+1. order_quantity: in this CTE, only customers who successfully checked out are selected.
+2. spender: in this CTE, the total spend of each customer is calculated by multiplying the quantity of each product by the price of the product.
+3. spender_rank: in this CTE, the rank() function is used to rank the customers based on the total spend.
+	The rank is done in descending order, finally, filter from this CTE where the row_rank is less than or equal to 5.
+
+Note: Do not use order by and limit 5 in the final query, as it will not work in the case of ties.
+*/
 with
 	order_quantity as (
 		select
