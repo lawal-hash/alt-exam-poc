@@ -148,6 +148,14 @@ group by customer_id
 
 
 -- question 2b.3
+/*
+Find the average number of visits per customer, considering only customers who completed 
+
+To find the average number of visits per customer, created a CTE.
+1. event_group: in this CTE, the count distinct event of all event_data[timestamp] events, grouped by customer_id.
+filter for customers who successfully checked out by using a subquery returns a list, and  considering only event_type is 'visit'.
+In the final query, get the average of the event_count.
+*/
 with event_group as (
     select customer_id,
         count(distinct e.event_data->>'timestamp') as event_count
