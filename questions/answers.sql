@@ -37,25 +37,59 @@ where
 	row_rank = 1
 
 
+-- Question 2a.2
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+with order_quantity as (
+select
+	customer_id,
+	e.event_data  ->> 'event_type' as event_type,
+	e.event_data  ->> 'item_id' as item_id,
+	e.event_data  ->> 'quantity' as quantity
+from
+	alt_school.events e
+where
+	customer_id in (
+	select
+		distinct customer_id
+	from
+		alt_school.events e
+	where
+		e.event_data  ->> 'status' = 'success')
+	and e.event_data  ->> 'event_type' not in ('checkout', 'visit')
+),
+spender as (
+select
+	customer_id,
+	sum(quantity::int * price) as total_spend
+from
+	order_quantity o
+join alt_school.products p on
+	o.item_id :: int = p.id
+where
+	quantity is not null
+group by
+	customer_id ),
+spender_rank as (
+select
+	customer_id,
+	location,
+	total_spend,
+	rank() over(
+order by
+	total_spend desc) ROW_RANK
+from
+	spender
+join alt_school.customers
+		using (customer_id)
+)
+select
+	customer_id,
+	location,
+	total_spend
+from
+	spender_rank
+where
+	row_rank <= 5
 
 
 
