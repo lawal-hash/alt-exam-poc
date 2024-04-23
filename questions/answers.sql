@@ -112,6 +112,16 @@ where row_rank = 1
 
 
 -- Question 2b.2
+/* 
+Identify the customers who abandoned their carts and count the number of events (excluding visits) that occurred before the abandonment
+
+To identify the customers who abandoned their carts, created a CTE.
+1. event_group: in this CTE, the count of all events, grouped by customer_id, event_type, and status.
+2. In the final query, get the unique list  of customers (id) who successfully checked out (a subquery is used to get this list).
+   					filter by the result of the subquery, by excluding customers who successfully checked out, the result will be customers who abandoned their carts.
+					In addition, exclude events of type 'visit' from customers who abandoned their carts. Sum the count of remaining events that occurred grouped by customer_id, this result to the num_of_events before the abandonment.
+
+*/
 with event_group as (
     select customer_id,
         e.event_data->>'event_type' as event_type,
