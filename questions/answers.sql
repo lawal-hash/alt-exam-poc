@@ -1,4 +1,16 @@
 -- Question 2a.1
+/* 
+what is the most ordered item based on the number of times it appears in an order cart that checked out successfully?
+
+To get the most ordered item, created 2 CTEs, most_ordered_items and most_ordered_items_rank.
+1. most_ordered_items: in this CTE, only product that are successfully checked out are selected. It is also worth nothing that the sum of 'quantity' of each product is used to determine 
+ 					the number of times it appears in an order cart that checked out successfully.
+2. most_ordered_items_rank: in this CTE, the rank() function is used to rank the products based on the number of times they appear in an order cart that checked out successfully.
+   					The rank is done in descending order, finally, filter from this CTE where the row_rank is equal to 1.	
+
+Note: Do not use order by and limit in the final query, as it will not work in the case of ties.
+				
+ */
 
 with most_ordered_items as(
 select
