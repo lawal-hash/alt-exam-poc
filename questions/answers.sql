@@ -64,9 +64,9 @@ with
 	order_quantity as (
 		select
 			customer_id,
-			e.event_data - > > 'event_type' as event_type,
-			e.event_data - > > 'item_id' as item_id,
-			e.event_data - > > 'quantity' as quantity
+			e.event_data ->> 'event_type' as event_type,
+			e.event_data ->> 'item_id' as item_id,
+			e.event_data ->> 'quantity' as quantity
 		from
 			alt_school.events e
 		where
@@ -76,9 +76,9 @@ with
 				from
 					alt_school.events e
 				where
-					e.event_data - > > 'status' = 'success'
+					e.event_data ->> 'status' = 'success'
 			)
-			and e.event_data - > > 'event_type' not in ('checkout', 'visit')
+			and e.event_data ->> 'event_type' not in ('checkout', 'visit')
 	),
 	spender as (
 		select
@@ -133,8 +133,8 @@ with
 			alt_school.events e
 			join alt_school.customers using (customer_id)
 		where
-			e.event_data - > > 'event_type' = 'checkout'
-			and e.event_data - > > 'status' = 'success'
+			e.event_data ->> 'event_type' = 'checkout'
+			and e.event_data ->> 'status' = 'success'
 		group by
 			location
 	),
@@ -174,15 +174,15 @@ with
 	event_group as (
 		select
 			customer_id,
-			e.event_data - > > 'event_type' as event_type,
-			e.event_data - > > 'status' as status,
+			e.event_data ->> 'event_type' as event_type,
+			e.event_data ->> 'status' as status,
 			count(1) as event_count
 		from
 			alt_school.events e
 		group by
 			customer_id,
-			e.event_data - > > 'event_type',
-			e.event_data - > > 'status'
+			e.event_data ->> 'event_type',
+			e.event_data ->> 'status'
 	)
 select
 	customer_id,
@@ -217,7 +217,7 @@ with
 	event_group as (
 		select
 			customer_id,
-			count(distinct e.event_data - > > 'timestamp') as event_count
+			count(distinct e.event_data ->> 'timestamp') as event_count
 		from
 			alt_school.events e
 		where
@@ -227,9 +227,9 @@ with
 				from
 					alt_school.events e
 				where
-					e.event_data - > > 'status' = 'success'
+					e.event_data ->> 'status' = 'success'
 			)
-			and e.event_data - > > 'event_type' = 'visit'
+			and e.event_data ->> 'event_type' = 'visit'
 		group by
 			customer_id
 	)
