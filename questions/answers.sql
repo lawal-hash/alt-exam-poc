@@ -1,3 +1,64 @@
+-- Question 2a.1
+
+with most_ordered_items as(
+select
+	id as product_id,
+	name as product_name,
+	sum(quantity)as num_times_in_successful_orders
+from
+	alt_school.orders o
+join alt_school.line_items li
+		using(order_id)
+join alt_school.products p
+on
+	li.item_id = p.id
+where
+	status = 'success'
+group by
+	id,
+	name,
+	status),
+most_ordered_items_rank as (
+select
+	*,
+	rank() over(
+order by
+	num_times_in_successful_orders desc) row_rank
+from
+	most_ordered_items)
+
+select
+	product_id,
+	product_name,
+	num_times_in_successful_orders
+from
+	most_ordered_items_rank
+where
+	row_rank = 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 -- Question 2b.1 
 
 with location_count as (
